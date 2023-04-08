@@ -1,0 +1,56 @@
+pipeline{
+  agent {
+    label 'master'
+  } 
+  tools {
+    maven 'maven3.9.1'
+  }
+  //options{}
+  //triggers{}
+  stages {
+    stage('1Clone'){
+      steps{
+        sh "echo 'cloning the latest application version' "
+        git "https://github.com/0055k0si/maven-web-application.git"
+        sh "echo 'latest application version available for testing and build' "
+      }
+    }
+    stage('2TestBuild'){
+      steps{
+        sh "echo 'running JUnit-test-cases' "
+        sh "echo 'testing must passed to create artifacts ' "
+        sh "mvn clean package" 
+        
+      }
+    }
+   stage('3CodeQualityAnalysis') {
+       steps{
+           sh "echo setup sonarqube aythentication"
+           sh "echo 'Performing CodeQualityAnalysis' "
+           sh "mvn sonar:sonar"
+       }
+   }
+   stage('4UpploadArtifacts') {
+       steps{
+           sh "echo configure nexus authentication"
+           sh "mvn deploy"
+       }
+    }
+   stage('5deploy') {
+       steps {
+           deploy adapters: [tomcat9(credentialsId: 'cf869ef4-1f66-427a-9e12-62448491f03a', path: '', url: 'http://100.25.145.36:8080/')], contextPath: null, war: 'target/*war'
+       }
+   }
+   }
+   post{
+       always{emailext body: '''Great job team
+
+Kosi O ''', recipientProviders: [buildUser(), developers()], subject: 'Build Success ', to: '0055.k0si@gmail.com, klassified95@gmail.com'}
+       success{emailext body: '''Great job team
+
+Kosi O ''', recipientProviders: [buildUser(), developers()], subject: 'Build Success ', to: '0055.k0si@gmail.com, klassified95@gmail.com'}
+       failure{emailext body: '''Build Fail, kindly review job 
+
+Kosi O ''', recipientProviders: [buildUser(), developers()], subject: 'Build Success ', to: '0055.k0si@gmail.com, klassified95@gmail.com'}
+   }
+}
