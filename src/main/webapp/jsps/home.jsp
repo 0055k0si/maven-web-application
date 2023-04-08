@@ -9,7 +9,7 @@
 </head>
 </head>
 <body>
-<h1 align="center">Welcome to Kosi Devops class Web application Project 31 automation.</h1>
+<h1 align="center">Welcome to tESLA Web Application and  Devops class Web application Project 31 automation.</h1>
 <h1 align="center">We are developing and supporting quality Software Solutions to millions of clients globally.
 	           We are raising millionaires in IT and DevOps automation. Class 32 Starts in April. 
 	We offer Training for DevOps with Linux and Cloud equipping IT Engineers for best worldwide performance.</h1>
